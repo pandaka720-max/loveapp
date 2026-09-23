@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Для моей любимой 💖</title>
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
-      --pink-primary: #ff4b72;
-      --pink-accent: #ff758c;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --text-color: #4a2c35;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -24,10 +16,10 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg-gradient);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
       min-height: 100vh;
-      color: var(--text-color);
+      color: #4a2c35;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -100,8 +92,8 @@
     }
 
     .tab-btn.active {
-      background: var(--pink-primary);
-      color: white;
+      background: #ff4b72;
+      color: #ffffff;
       box-shadow: 0 3px 10px rgba(255, 75, 114, 0.3);
       transform: scale(1.02);
     }
@@ -123,13 +115,19 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Карточки слайдов */
     .card-container {
-      background: var(--card-bg);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 15px;
@@ -176,8 +174,8 @@
       padding: 12px;
       border: none;
       border-radius: 15px;
-      background: linear-gradient(135deg, var(--pink-primary), var(--pink-accent));
-      color: white;
+      background: linear-gradient(135deg, #ff4b72, #ff758c);
+      color: #ffffff;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
@@ -219,7 +217,7 @@
     <div id="tab-compliments" class="tab-content active">
       <div class="card-container">
         <div class="card-image-wrapper">
-          <img id="img-compliments" class="card-image" src="" alt="Фото" />
+          <img id="img-compliments" class="card-image" src="" alt="Фото">
         </div>
         <div id="text-compliments" class="card-text"></div>
         <button class="next-btn" onclick="nextSlide('compliments')">Еще комплимент 💕</button>
@@ -230,7 +228,7 @@
     <div id="tab-care" class="tab-content">
       <div class="card-container">
         <div class="card-image-wrapper">
-          <img id="img-care" class="card-image" src="" alt="Фото" />
+          <img id="img-care" class="card-image" src="" alt="Фото">
         </div>
         <div id="text-care" class="card-text"></div>
         <button class="next-btn" onclick="nextSlide('care')">Ещё забота 🌷</button>
@@ -241,7 +239,7 @@
     <div id="tab-memories" class="tab-content">
       <div class="card-container">
         <div class="card-image-wrapper">
-          <img id="img-memories" class="card-image" src="" alt="Фото" />
+          <img id="img-memories" class="card-image" src="" alt="Фото">
         </div>
         <div id="text-memories" class="card-text"></div>
         <button class="next-btn" onclick="nextSlide('memories')">Ещё воспоминание ✨</button>
@@ -252,14 +250,14 @@
 
   <script>
     // Инициализация Telegram WebApp
-    const tg = window.Telegram?.WebApp;
+    var tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) {
       tg.ready();
       tg.expand();
     }
 
     // Данные для слайдов
-    const data = {
+    var data = {
       compliments: [
         { text: "Ты делаешь мой мир ярче просто тем, что ты есть 🩷", img: "photos/compliment1.jpg" },
         { text: "Ты самая лучшая девушка 🩷", img: "photos/compliment2.jpg" },
@@ -305,7 +303,7 @@
     };
 
     // Индексы текущих картинок
-    const indices = {
+    var indices = {
       compliments: 0,
       care: 0,
       memories: 0
@@ -313,18 +311,27 @@
 
     // Переключение табов
     function switchTab(tabName) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      var buttons = document.querySelectorAll('.tab-btn');
+      var contents = document.querySelectorAll('.tab-content');
 
-      event.currentTarget.classList.add('active');
-      document.getElementById(`tab-${tabName}`).classList.add('active');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('active');
+      }
+      for (var j = 0; j < contents.length; j++) {
+        contents[j].classList.remove('active');
+      }
+
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+      document.getElementById('tab-' + tabName).classList.add('active');
     }
 
     // Показ текущего слайда
     function renderSlide(category) {
-      const item = data[category][indices[category]];
-      document.getElementById(`img-${category}`).src = item.img;
-      document.getElementById(`text-${category}`).innerText = item.text;
+      var item = data[category][indices[category]];
+      document.getElementById('img-' + category).src = item.img;
+      document.getElementById('text-' + category).innerText = item.text;
     }
 
     // Переключение на следующий слайд
@@ -335,14 +342,14 @@
 
     // Создание анимации сердечек
     function createHearts() {
-      const container = document.getElementById('hearts-container');
-      const heartIcons = ['💖', '💗', '🌸', '✨', '🩷'];
-      
-      for (let i = 0; i < 15; i++) {
-        const heart = document.createElement('div');
+      var container = document.getElementById('hearts-container');
+      var heartIcons = ['💖', '💗', '🌸', '✨', '🩷'];
+
+      for (var i = 0; i < 15; i++) {
+        var heart = document.createElement('div');
         heart.className = 'heart-bg';
         heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.left = (Math.random() * 100) + 'vw';
         heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
         heart.style.animationDelay = (Math.random() * 5) + 's';
         heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
